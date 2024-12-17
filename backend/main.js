@@ -6,6 +6,7 @@ const dbconnect = require("./database/db");
 const { route } = require("./routes/user.routes");
 const router1 = require("./routes/user.routes");
 const cookieparser = require("cookie-parser");
+const router2 = require("./routes/captain.routes");
 
 app.use(cookieparser());
 app.use(express.json());
@@ -16,7 +17,7 @@ app.use(
   })
 );
 app.use("/user", router1);
-
+app.use("/captain", router2);
 const PORT = process.env.PORT || 5000;
 
 const server = () => {
