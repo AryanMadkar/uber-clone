@@ -3,10 +3,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const dbconnect = require("./database/db");
-const { route } = require("./routes/user.routes");
 const router1 = require("./routes/user.routes");
 const cookieparser = require("cookie-parser");
-const router2 = require("./routes/captain.routes");
+const captainRouter = require("./routes/captain.routes");
 
 app.use(cookieparser());
 app.use(express.json());
@@ -17,7 +16,8 @@ app.use(
   })
 );
 app.use("/user", router1);
-app.use("/captain", router2);
+app.use("/captain", captainRouter);
+
 const PORT = process.env.PORT || 5000;
 
 const server = () => {

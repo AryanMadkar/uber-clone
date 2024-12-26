@@ -7,7 +7,7 @@ const {
   getuser,
   logoutuser,
 } = require("../controllers/user.controller");
-const authuser = require("../middleware/auth.middleware");
+const { authuser } = require("../middleware/auth.middleware");
 router1.post(
   "/register",
   [
@@ -30,6 +30,6 @@ router1.post(
   loginuser
 );
 router1.get("/profile", authuser, getuser);
-router1.get("/logout", authuser, logoutuser);
+router1.post("/logout", authuser, logoutuser);
 
 module.exports = router1;

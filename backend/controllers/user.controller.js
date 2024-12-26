@@ -76,12 +76,14 @@ const loginuser = async (req, res) => {
 
 const getuser = async (req, res) => {
   try {
-    // User is populated by authuser middleware
-    const user = req.user;
+    // Check if the user object is attached by the middleware
+    const user = req?.user;
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    return res.status(200).json({ user });
+
+    // Return the user details without sensitive fields
+    return res.status(200).json({message:"User details"});
   } catch (error) {
     console.error("Error in getuser:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
@@ -90,19 +92,26 @@ const getuser = async (req, res) => {
 
 const logoutuser = async (req, res) => {
   try {
-    // Clear token cookie
-    const token = req.cookie?.token || req.headers.authorization?.split(" ")[1];
+    // Fetch token from cookies or authorization header
+    const token =
+      req.cookies?.token || req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(403).json({ message: "No token provided" });
     }
+
+    // Add the token to the blacklist
     await BlacklistingToken.create({ token });
+
+    // Clear the token from the cookie
     res.clearCookie("token");
+
     return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    console.error("Error in logoutUser:", error.message);
+    console.error("Error in logoutuser:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 module.exports = {
   logoutuser,
   getuser,

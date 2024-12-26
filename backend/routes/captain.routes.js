@@ -1,6 +1,12 @@
 const express = require("express");
 const { body } = require("express-validator");
-const { registeruser } = require("../controllers/captain.contoller");
+const {
+  registeruser,
+  logincaptain,
+  getcaptain,
+  logoutcaptain,
+} = require("../controllers/captain.contoller");
+const { authcaptain } = require("../middleware/auth.middleware");
 
 const captainRouter = express.Router();
 
@@ -35,5 +41,22 @@ captainRouter.post(
   ],
   registeruser
 );
+
+captainRouter.post(
+  "/login",
+  [
+    body("email").isEmail(),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters long")
+      .withMessage(
+        "Password must contain at least one letter, one number, and one special character"
+      ),
+  ],
+  logincaptain
+);
+
+captainRouter.get("/getcaptain", authcaptain, getcaptain);
+captainRouter.get("/logout", authcaptain, logoutcaptain);
 
 module.exports = captainRouter;
